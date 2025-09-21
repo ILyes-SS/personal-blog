@@ -1,11 +1,12 @@
-import { LogoutButton } from "@/components/logout-button";
-import Image from "next/image";
+import LatestPost from "@/components/LatestPost";
+import { prisma } from "@/db/prisma";
 
-export default function Home() {
+export default async function Home() {
+  const posts = await prisma.post.findMany({ orderBy: { createdAt: "desc" } });
+  const latestPost = posts[0];
   return (
     <div>
-      <p>Welcome to Home</p>
-      <LogoutButton />
+      <LatestPost {...latestPost} />
     </div>
   );
 }
