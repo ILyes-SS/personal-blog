@@ -1,9 +1,9 @@
 import Image from "next/image";
 import React from "react";
 import { Badge } from "./ui/badge";
-import { redirect } from "next/navigation";
 import { getCategorytitle } from "@/utils/getCategory";
 import Link from "next/link";
+import { PostProps } from "@/utils/types";
 
 const LatestPost = async ({
   title,
@@ -12,14 +12,7 @@ const LatestPost = async ({
   cover,
   slug,
   createdAt,
-}: {
-  title: string;
-  categoryId: string;
-  content: string;
-  cover: string | null;
-  slug: string;
-  createdAt: Date;
-}) => {
+}: PostProps) => {
   const category: string = await getCategorytitle(categoryId);
   return (
     <Link href={"/" + slug} prefetch className="block px-4">

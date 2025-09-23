@@ -21,7 +21,9 @@ const BlogPosts = async ({
   )?.id;
   const search = searchParams?.search;
 
-  const filteredPosts = posts.filter((post) => post.categoryId == categoryId);
+  const filteredPosts = posts.filter(
+    (post) => post.categoryId == categoryId || category == "all",
+  );
   const fuse = new Fuse(filteredPosts, {
     keys: ["title"],
   });
@@ -33,7 +35,7 @@ const BlogPosts = async ({
       <h1>Blog Posts</h1>
       <SearchBar />
       <CategoriesFilter />
-      <FilteredPosts />
+      <FilteredPosts posts={filteredPosts} />
     </div>
   );
 };
