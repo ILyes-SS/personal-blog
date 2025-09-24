@@ -15,7 +15,9 @@ const BlogPosts = async ({
 }) => {
   const categories = await prisma.category.findMany({});
 
-  const category = searchParams?.category || "all";
+  const category = Array.isArray(searchParams?.category)
+    ? searchParams.category[0]
+    : (searchParams?.category ?? "all");
   const categoryId = categories.find(
     (ctg) => ctg.title == String(category),
   )?.id;
@@ -34,7 +36,7 @@ const BlogPosts = async ({
     <div>
       <h1>Blog Posts</h1>
       <SearchBar />
-      <CategoriesFilter />
+      <CategoriesFilter categories={categories} />
       <FilteredPosts posts={filteredPosts} />
     </div>
   );
