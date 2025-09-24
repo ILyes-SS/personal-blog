@@ -1,19 +1,22 @@
-import { getCategorytitle } from "@/utils/getCategory";
+"use client";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 import { Badge } from "./ui/badge";
 import { PostProps } from "@/utils/types";
+import { Category } from "@prisma/client";
 
-const PostCard = async ({
+const PostCard = ({
   title,
   categoryId,
   content,
   cover,
   slug,
   createdAt,
-}: PostProps) => {
-  const category: string = await getCategorytitle(categoryId);
+  categories,
+}: PostProps & { categories: Category[] }) => {
+  const category: string = categories.find(
+    (ctg) => ctg.id == categoryId,
+  )?.title!;
   return (
     <Link href={"/" + slug} prefetch className="block">
       <div className="relative">
@@ -31,7 +34,7 @@ const PostCard = async ({
         {title}
       </h2>
       <p className="overflow-hidden text-nowrap text-ellipsis">{content}</p>
-      <p>{createdAt.toLocaleDateString()}</p>
+      <p>{createdAt.toISOString()}</p>
     </Link>
   );
 };

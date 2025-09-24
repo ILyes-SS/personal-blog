@@ -13,7 +13,6 @@ const CategoriesFilter = ({ categories }: { categories: Category[] }) => {
   const [selectedCategory, setSelectedCategory] = useState(
     searchParams?.get("category") || "all",
   );
-  console.log("SearchParams in category filter", searchParams.get("category"));
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams.toString()); // clone
