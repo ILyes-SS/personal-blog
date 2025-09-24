@@ -8,7 +8,7 @@ export default async function Home() {
   return (
     <div>
       <LatestPost {...latestPost} />
-      <BlogPosts posts={posts.toSpliced(0, 1)} />
+      <BlogPosts editable={false} posts={posts.toSpliced(0, 1)} />
     </div>
   );
 }
