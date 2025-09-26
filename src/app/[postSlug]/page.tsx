@@ -24,7 +24,7 @@ const page = async ({ params }: { params: Promise<{ postSlug: string }> }) => {
           <Post post={post} />
           <PostComments />
         </div>
-        <PostAuthor />
+        <PostAuthor author={author!} />
       </div>
     </div>
   );
