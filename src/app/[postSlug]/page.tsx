@@ -12,16 +12,16 @@ const page = async ({ params }: { params: Promise<{ postSlug: string }> }) => {
   const author = await prisma.user.findUnique({
     where: { email: authUserEmail },
   });
-  const categories = await prisma.category.findMany({});
   const post = await prisma.post.findUnique({
     where: { slug: postSlug },
+    include: { category: true, author: true },
   });
   return (
-    <div>
+    <div className="flex">
       <PostActions />
-      <div>
+      <div className="flex max-md:flex-col">
         <div>
-          <Post />
+          <Post post={post} />
           <PostComments />
         </div>
         <PostAuthor />
