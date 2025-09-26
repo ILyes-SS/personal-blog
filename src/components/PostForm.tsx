@@ -1,7 +1,7 @@
 "use client";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { Category, User } from "@prisma/client";
-import { createPost } from "@/actions/posts";
+import { Category, Post, User } from "@prisma/client";
+import { createPost, editPost } from "@/actions/posts";
 import { useTransition } from "react";
 import { toast } from "sonner";
 
@@ -10,22 +10,40 @@ type Inputs = {
   content: string;
   slug: string;
   category: string;
-  cover: string;
+  cover: string | null;
 };
-const CreateForm = ({
+const PostForm = ({
   categories,
   author,
+  post,
+  edit,
 }: {
   categories: Category[];
   author: User | null;
+  post: Post | null;
+  edit: boolean;
 }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Inputs>();
+  } = useForm<Inputs>(
+    edit
+      ? {
+          defaultValues: {
+            title: post!.title,
+            content: post!.content,
+            slug: post!.slug,
+            category:
+              categories.find((category) => category.id == post?.categoryId)
+                ?.title ?? "",
+            cover: post!.cover,
+          },
+        }
+      : undefined,
+  );
   const [isPending, startTransition] = useTransition();
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
+  const onSubmitCreate: SubmitHandler<Inputs> = (data) => {
     startTransition(async () => {
       const post = await createPost(
         data.title,
@@ -40,9 +58,24 @@ const CreateForm = ({
     });
   };
 
+  const onSubmitEdit: SubmitHandler<Inputs> = (data) => {
+    startTransition(async () => {
+      const p = await editPost(
+        data.title,
+        data.category,
+        data.content,
+        data.cover,
+        data.slug,
+        post!.id,
+      );
+      if (p) toast.success("post edited successfully");
+      else toast.error("failed to edit post");
+    });
+  };
+
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(edit ? onSubmitEdit : onSubmitCreate)}
       className="mx-auto mt-8 max-w-xl space-y-4"
     >
       <div>
@@ -75,7 +108,9 @@ const CreateForm = ({
         </label>
         <select {...register("category")}>
           {categories.map((category) => (
-            <option value={category.title}>{category.title}</option>
+            <option key={category.title} value={category.title}>
+              {category.title}
+            </option>
           ))}
         </select>
         {errors.category && <span>This field is required</span>}
@@ -108,10 +143,16 @@ const CreateForm = ({
         type="submit"
         className="rounded bg-blue-600 px-4 py-2 text-white disabled:opacity-50"
       >
-        {isPending ? "Creating..." : "Create Post"}
+        {isPending
+          ? edit
+            ? "Editing..."
+            : "Creating..."
+          : edit
+            ? "Edit Post"
+            : "Create Post"}
       </button>
     </form>
   );
 };
 
-export default CreateForm;
+export default PostForm;

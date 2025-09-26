@@ -110,7 +110,7 @@ const FilteredPosts = ({
                   </AlertDialogContent>
                 </AlertDialog>
                 <Button variant={"ghost"} asChild>
-                  <Link href={"/edit-post"}>
+                  <Link href={"/edit-post/" + post.slug}>
                     <Edit2 />
                   </Link>
                 </Button>
