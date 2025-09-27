@@ -2,7 +2,7 @@
 import { likePost } from "@/actions/posts";
 import { Heart, Link, MessageCircleMore } from "lucide-react";
 import { usePathname } from "next/navigation";
-import React, { useState, useTransition } from "react";
+import React, { useOptimistic, useState, useTransition } from "react";
 import { toast } from "sonner";
 type PostActionProp =
   | ({
@@ -46,7 +46,17 @@ const PostActions = ({
 }) => {
   const path = usePathname();
   const [isPending, startTransition] = useTransition();
-  const [isLiked, setIsLiked] = useState(alreadyLiked);
+  //   const [isLiked, setIsLiked] = useState(alreadyLiked);
+  const [optimisticLiked, setOptimisticLiked] = useOptimistic(
+    alreadyLiked,
+    (currentLiked, optimisticLiked: boolean) => optimisticLiked,
+  );
+
+  const [optimisticLikeCount, setOptimisticLikeCount] = useOptimistic(
+    post?.users.length,
+    (currentCount, optimisticChange: number) =>
+      currentCount! + optimisticChange,
+  );
 
   const handleCopy = async () => {
     try {
@@ -58,13 +68,16 @@ const PostActions = ({
     }
   };
   function handleLikePost() {
+    const wasLiked = alreadyLiked;
+    const likeChange = wasLiked ? -1 : 1;
+
     startTransition(async () => {
-      setIsLiked((prev) => !prev);
+      setOptimisticLiked(!wasLiked);
+      setOptimisticLikeCount(likeChange);
       const p = await likePost(userId, post?.id as string, alreadyLiked);
       if (p) toast.success("toggled post successfully");
       else {
         toast.error("failed to toggle post");
-        setIsLiked((prev) => !prev);
       }
     });
   }
@@ -73,11 +86,11 @@ const PostActions = ({
       <div>
         <Heart
           className="cursor-pointer"
-          stroke={isLiked ? "red" : "black"}
-          fill={isLiked ? "red" : undefined}
+          stroke={optimisticLiked ? "red" : "black"}
+          fill={optimisticLiked ? "red" : undefined}
           onClick={handleLikePost}
-        />{" "}
-        <p> {post?.users.length} </p>
+        />
+        <p> {optimisticLikeCount} </p>
       </div>
       <div>
         <MessageCircleMore /> {post?.comments.length}
