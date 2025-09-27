@@ -69,3 +69,42 @@ export async function editPost(
     redirect("/my-posts");
   }
 }
+
+export async function likePost(
+  userId: string,
+  postId: string,
+  alreadyLiked: boolean,
+) {
+  const postSlug = await prisma.post.findUnique({
+    where: { id: postId },
+    select: { slug: true },
+  });
+  let post;
+  try {
+    if (alreadyLiked) {
+      post = await prisma.user.update({
+        where: { id: userId },
+        data: {
+          likedPosts: {
+            disconnect: { id: postId },
+          },
+        },
+      });
+      return post;
+    } else {
+      post = await prisma.user.update({
+        where: { id: userId },
+        data: {
+          likedPosts: {
+            connect: { id: postId },
+          },
+        },
+      });
+      return post;
+    }
+  } catch (error) {
+    return null;
+  } finally {
+    revalidatePath("/" + postSlug?.slug);
+  }
+}
