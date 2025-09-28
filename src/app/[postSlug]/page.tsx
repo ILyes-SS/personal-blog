@@ -41,7 +41,7 @@ const page = async ({ params }: { params: Promise<{ postSlug: string }> }) => {
       <div className="flex max-md:flex-col">
         <div>
           <Post post={post} />
-          <PostComments />
+          <PostComments post={postAction} user={user} />
         </div>
         <PostAuthor author={post?.author!} />
       </div>

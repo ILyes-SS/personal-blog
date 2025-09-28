@@ -108,3 +108,39 @@ export async function likePost(
     revalidatePath("/" + postSlug?.slug);
   }
 }
+export async function addComment(
+  content: string,
+  userId: string,
+  postId: string,
+  replyToId?: string,
+) {
+  const postSlug = await prisma.post.findUnique({
+    where: { id: postId },
+    select: { slug: true },
+  });
+  let post;
+  try {
+    let obj = replyToId
+      ? {
+          data: {
+            content: content,
+            post: { connect: { id: postId } },
+            author: { connect: { id: userId } },
+            replyTo: { connect: { id: replyToId } },
+          },
+        }
+      : {
+          data: {
+            content: content,
+            post: { connect: { id: postId } },
+            author: { connect: { id: userId } },
+          },
+        };
+    const newComment = await prisma.comment.create(obj);
+    return newComment;
+  } catch (error) {
+    return null;
+  } finally {
+    revalidatePath("/" + postSlug?.slug);
+  }
+}
