@@ -3,6 +3,7 @@ import React, { useOptimistic } from "react";
 import AddComment from "./AddComment";
 import { User } from "@prisma/client";
 import { Separator } from "./ui/separator";
+import CommentsList from "./CommentsList";
 
 export type Prop =
   | ({
@@ -52,6 +53,7 @@ const PostComments = ({ post, user }: { post: Prop; user: User | null }) => {
         user={user}
         setOptimisicCommentCount={setOptimisicCommentCount}
       />
+      <CommentsList comments={post?.comments} />
     </div>
   );
 };

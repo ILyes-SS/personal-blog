@@ -144,3 +144,25 @@ export async function addComment(
     revalidatePath("/" + postSlug?.slug);
   }
 }
+
+export const getAuthor = async (authorId: string) => {
+  try {
+    const a = await prisma.user.findUnique({
+      where: { id: authorId },
+    });
+    return a;
+  } catch (error) {
+    console.log("get author ", error);
+  }
+};
+export const getReplies = async (commentId: string) => {
+  try {
+    const r = await prisma.comment.findUnique({
+      where: { id: commentId },
+      select: { replies: true },
+    });
+    return r;
+  } catch (error) {
+    console.log("get replies failed ", error);
+  }
+};
