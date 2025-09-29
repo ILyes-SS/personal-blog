@@ -5,7 +5,7 @@ import { addComment } from "@/actions/posts";
 import { toast } from "sonner";
 import { useCommentContext } from "@/providers/CommentProvider";
 
-const AddComment = () => {
+const AddComment = ({ replyToId }: { replyToId: string | undefined }) => {
   const { post, user, setOptimisicComments, setOptimisicCommentCount } =
     useCommentContext();
   const [isPending, startTransition] = useTransition();
@@ -14,17 +14,19 @@ const AddComment = () => {
   function handleAddComment(formData: FormData) {
     startTransition(async () => {
       setOptimisicCommentCount();
-      setOptimisicComments({
-        id: "snoivsofvisnlkdnbsu",
-        createdAt: new Date(),
-        content: content,
-        authorId: user?.id as string,
-        postId: post?.id,
-      });
+      if (replyToId)
+        setOptimisicComments({
+          id: "snoivsofvisnlkdnbsu",
+          createdAt: new Date(),
+          content: content,
+          authorId: user?.id as string,
+          postId: post?.id,
+        });
       const c = await addComment(
         content,
         user?.id as string,
         post?.id as string,
+        replyToId,
       );
       if (c) toast.success("comment added successfully");
       else toast.error("failed to add comment");

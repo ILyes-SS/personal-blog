@@ -20,7 +20,14 @@ const page = async ({ params }: { params: Promise<{ postSlug: string }> }) => {
   });
   const postAction = await prisma.post.findUnique({
     where: { slug: postSlug },
-    include: { users: true, comments: true },
+    include: {
+      users: true,
+      comments: {
+        orderBy: {
+          createdAt: "desc",
+        },
+      },
+    },
   });
   const userWithLikes = await prisma.user.findUnique({
     where: { id: user?.id },

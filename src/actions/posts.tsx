@@ -112,7 +112,7 @@ export async function addComment(
   content: string,
   userId: string,
   postId: string,
-  replyToId?: string,
+  replyToId: string | undefined,
 ) {
   const postSlug = await prisma.post.findUnique({
     where: { id: postId },
@@ -137,6 +137,7 @@ export async function addComment(
           },
         };
     const newComment = await prisma.comment.create(obj);
+
     return newComment;
   } catch (error) {
     return null;

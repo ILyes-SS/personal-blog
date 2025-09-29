@@ -4,9 +4,13 @@ import { useCommentContext } from "@/providers/CommentProvider";
 
 const CommentsList = () => {
   const { optimisticComments } = useCommentContext();
+  const noReplyComments = optimisticComments.filter(
+    //these are comments that do not reply to other comments
+    (comment) => !comment.replyToId,
+  );
   return (
     <div>
-      {optimisticComments!.map((comment) => {
+      {noReplyComments!.map((comment) => {
         return <Comment key={comment.id} comment={comment} />;
       })}
     </div>

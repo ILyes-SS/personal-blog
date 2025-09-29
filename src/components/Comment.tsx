@@ -45,12 +45,10 @@ const Comment = ({ comment }: { comment: CommentType }) => {
         >
           <MessageCircle className="rotate-y-180" /> reply
         </Button>
-        {/* {reply && <AddComment         post={post}
-        user={user}
-        setOptimisicCommentCount={setOptimisicCommentCount}/>} */}
+        {reply && <AddComment replyToId={comment.id as string} />}
+        {replies &&
+          replies?.map((reply) => <Comment key={reply.id} comment={reply} />)}
       </div>
-      {replies &&
-        replies?.map((reply) => <Comment key={reply.id} comment={reply} />)}
     </div>
   );
 };
