@@ -1,7 +1,7 @@
 "use client";
 import React, { useOptimistic } from "react";
 import AddComment from "./AddComment";
-import { User } from "@prisma/client";
+import { Comment, User } from "@prisma/client";
 import { Separator } from "./ui/separator";
 import CommentsList from "./CommentsList";
 
@@ -42,6 +42,20 @@ const PostComments = ({ post, user }: { post: Prop; user: User | null }) => {
     (currentCount: number, optimisicCommentCount: number) =>
       currentCount + optimisicCommentCount,
   );
+  const [optimisicComments, setOptimisicComments] = useOptimistic(
+    post?.comments!,
+    (
+      currentCount: Comment[],
+      optimisicComments: {
+        id: string;
+        createdAt: Date;
+        content: string;
+        authorId: string;
+        postId: string;
+        replyToId: string | null;
+      },
+    ) => [...currentCount, optimisicComments],
+  );
   return (
     <div>
       <Separator className="my-6" />
@@ -52,8 +66,9 @@ const PostComments = ({ post, user }: { post: Prop; user: User | null }) => {
         post={post}
         user={user}
         setOptimisicCommentCount={setOptimisicCommentCount}
+        setOptimisicComments={setOptimisicComments}
       />
-      <CommentsList comments={post?.comments} />
+      <CommentsList comments={optimisicComments} />
     </div>
   );
 };

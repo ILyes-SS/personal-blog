@@ -5,15 +5,25 @@ import { Button } from "./ui/button";
 import { addComment } from "@/actions/posts";
 import { User } from "@prisma/client";
 import { toast } from "sonner";
+import { randomUUID } from "crypto";
 
 const AddComment = ({
   post,
   user,
   setOptimisicCommentCount,
+  setOptimisicComments,
 }: {
   post: Prop;
   user: User | null;
   setOptimisicCommentCount: (action: number) => void;
+  setOptimisicComments: (action: {
+    id: string;
+    createdAt: Date;
+    content: string;
+    authorId: string;
+    postId: string;
+    replyToId: string | null;
+  }) => void;
 }) => {
   const [isPending, startTransition] = useTransition();
   const [content, setContent] = useState("");
@@ -21,6 +31,13 @@ const AddComment = ({
   function handleAddComment(formData: FormData) {
     startTransition(async () => {
       setOptimisicCommentCount(1);
+      setOptimisicComments({
+        id: randomUUID(),
+        createdAt: new Date(),
+        content: content,
+        authorId: user?.id as string,
+        postId: post?.id,
+      });
       const c = await addComment(
         content,
         user?.id as string,

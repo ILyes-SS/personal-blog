@@ -12,6 +12,7 @@ const page = async ({ params }: { params: Promise<{ postSlug: string }> }) => {
   const user = await prisma.user.findUnique({
     where: { email: authUserEmail },
   });
+  //try to reduce the fetching below
   const post = await prisma.post.findUnique({
     where: { slug: postSlug },
     include: { category: true, author: true },

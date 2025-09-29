@@ -5,10 +5,25 @@ import { Comment as CommentType, User } from "@prisma/client";
 import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { MessageCircle } from "lucide-react";
+import AddComment from "./AddComment";
 
-const Comment = ({ comment }: { comment: CommentType }) => {
+const Comment = ({
+  comment,
+  setOptimisicComments,
+}: {
+  comment: CommentType;
+  setOptimisicComments?: (action: {
+    id: string;
+    createdAt: Date;
+    content: string;
+    authorId: string;
+    postId: string;
+    replyToId: string | null;
+  }) => void;
+}) => {
   const [author, setAuthor] = useState<User>();
   const [replies, setReplies] = useState<CommentType[]>();
+  const [reply, setReply] = useState(false); //toggle form for replying
 
   useEffect(() => {
     (async () => {
@@ -18,6 +33,7 @@ const Comment = ({ comment }: { comment: CommentType }) => {
       setReplies(r?.replies);
     })();
   }, []);
+
   return (
     <div>
       <div
@@ -35,9 +51,16 @@ const Comment = ({ comment }: { comment: CommentType }) => {
           </p>
         </div>
         <p> {comment.content} </p>
-        <Button variant={"ghost"} className="mt-2 cursor-pointer">
+        <Button
+          onClick={() => setReply((prev) => !prev)}
+          variant={"ghost"}
+          className="mt-2 cursor-pointer"
+        >
           <MessageCircle className="rotate-y-180" /> reply
         </Button>
+        {/* {reply && <AddComment         post={post}
+        user={user}
+        setOptimisicCommentCount={setOptimisicCommentCount}/>} */}
       </div>
       {replies &&
         replies?.map((reply) => <Comment key={reply.id} comment={reply} />)}
