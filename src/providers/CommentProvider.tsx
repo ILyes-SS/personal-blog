@@ -7,22 +7,8 @@ type CommentProviderContextType = {
   post: Prop;
   user: User | null;
   optimisticCommentCount: number;
-  optimisticComments: {
-    id: string;
-    createdAt: Date;
-    content: string;
-    authorId: string;
-    postId: string;
-    replyToId: string | null;
-  }[];
-  setOptimisicComments: (comment: {
-    id: string;
-    createdAt: Date;
-    content: string;
-    authorId: string;
-    postId: string;
-    replyToId: string | null;
-  }) => void;
+  optimisticComments: CommentWithAuthorNreplies[];
+  setOptimisicComments: (comment: CommentWithAuthorNreplies) => void;
   setOptimisicCommentCount: () => void;
 };
 
@@ -30,6 +16,35 @@ type CommentProviderProps = {
   children: React.ReactNode;
   post: Prop;
   user: User | null;
+};
+
+export type CommentWithAuthorNreplies = {
+  author: {
+    name: string | null;
+    id: string;
+    createdAt: Date;
+    email: string;
+    location: string | null;
+    education: string | null;
+    isAuthor: boolean;
+  } | null;
+  replies:
+    | {
+        id: string;
+        content: string;
+        postId: string;
+        replyToId: string | null;
+        authorId: string;
+        createdAt: Date;
+      }[]
+    | [];
+} & {
+  id: string;
+  content: string;
+  postId: string;
+  replyToId: string | null;
+  authorId: string;
+  createdAt: Date;
 };
 
 const CommentProviderContext = createContext<
@@ -44,17 +59,7 @@ const CommentProvider = ({ children, post, user }: CommentProviderProps) => {
 
   const [optimisticComments, setOptimisicComments] = useOptimistic(
     post?.comments || [],
-    (
-      state,
-      newComment: {
-        id: string;
-        createdAt: Date;
-        content: string;
-        authorId: string;
-        postId: string;
-        replyToId: string | null;
-      },
-    ) => [...state, newComment],
+    (state, newComment: CommentWithAuthorNreplies) => [...state, newComment],
   );
 
   const value: CommentProviderContextType = {

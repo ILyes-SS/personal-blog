@@ -26,6 +26,10 @@ const page = async ({ params }: { params: Promise<{ postSlug: string }> }) => {
         orderBy: {
           createdAt: "desc",
         },
+        include: {
+          author: true,
+          replies: true,
+        },
       },
     },
   });

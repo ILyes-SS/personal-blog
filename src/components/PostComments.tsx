@@ -6,14 +6,34 @@ import { useCommentContext } from "@/providers/CommentProvider";
 
 export type Prop =
   | ({
-      comments: {
+      comments: ({
+        author: {
+          name: string | null;
+          id: string;
+          createdAt: Date;
+          email: string;
+          location: string | null;
+          education: string | null;
+          isAuthor: boolean;
+        } | null;
+        replies:
+          | {
+              id: string;
+              content: string;
+              postId: string;
+              replyToId: string | null;
+              authorId: string;
+              createdAt: Date;
+            }[]
+          | [];
+      } & {
         id: string;
-        createdAt: Date;
         content: string;
-        authorId: string;
         postId: string;
         replyToId: string | null;
-      }[];
+        authorId: string;
+        createdAt: Date;
+      })[];
       users: {
         name: string | null;
         id: string;

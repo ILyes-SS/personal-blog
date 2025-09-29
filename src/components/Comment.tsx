@@ -6,8 +6,9 @@ import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { MessageCircle } from "lucide-react";
 import AddComment from "./AddComment";
+import { CommentWithAuthorNreplies } from "@/providers/CommentProvider";
 
-const Comment = ({ comment }: { comment: CommentType }) => {
+const Comment = ({ comment }: { comment: CommentWithAuthorNreplies }) => {
   const [author, setAuthor] = useState<User>(); //comment author
   const [replies, setReplies] = useState<CommentType[]>();
   const [reply, setReply] = useState(false); //toggle form for replying
@@ -31,7 +32,10 @@ const Comment = ({ comment }: { comment: CommentType }) => {
       >
         <div className="flex items-center gap-3">
           <h2 className="text-lg font-semibold">
-            {author?.name || author?.email}
+            {comment.author?.name ||
+              comment.author?.email ||
+              author?.name ||
+              author?.name}
           </h2>
           <p>
             {comment.createdAt.getMonth()}/{comment.createdAt.getFullYear()}
@@ -46,8 +50,16 @@ const Comment = ({ comment }: { comment: CommentType }) => {
           <MessageCircle className="rotate-y-180" /> reply
         </Button>
         {reply && <AddComment replyToId={comment.id as string} />}
-        {replies &&
-          replies?.map((reply) => <Comment key={reply.id} comment={reply} />)}
+
+        {comment?.replies
+          ? comment.replies?.map((reply) => (
+              <Comment key={reply.id} comment={reply} />
+            ))
+          : replies
+            ? replies?.map((reply) => (
+                <Comment key={reply.id} comment={reply} />
+              ))
+            : null}
       </div>
     </div>
   );
