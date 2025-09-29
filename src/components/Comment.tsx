@@ -7,21 +7,8 @@ import { Button } from "./ui/button";
 import { MessageCircle } from "lucide-react";
 import AddComment from "./AddComment";
 
-const Comment = ({
-  comment,
-  setOptimisicComments,
-}: {
-  comment: CommentType;
-  setOptimisicComments?: (action: {
-    id: string;
-    createdAt: Date;
-    content: string;
-    authorId: string;
-    postId: string;
-    replyToId: string | null;
-  }) => void;
-}) => {
-  const [author, setAuthor] = useState<User>();
+const Comment = ({ comment }: { comment: CommentType }) => {
+  const [author, setAuthor] = useState<User>(); //comment author
   const [replies, setReplies] = useState<CommentType[]>();
   const [reply, setReply] = useState(false); //toggle form for replying
 

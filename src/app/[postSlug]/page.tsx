@@ -4,6 +4,7 @@ import PostAuthor from "@/components/PostAuthor";
 import PostComments from "@/components/PostComments";
 import { prisma } from "@/db/prisma";
 import { getUser } from "@/lib/supabase/server";
+import CommentProvider from "@/providers/CommentProvider";
 import React from "react";
 
 const page = async ({ params }: { params: Promise<{ postSlug: string }> }) => {
@@ -42,7 +43,9 @@ const page = async ({ params }: { params: Promise<{ postSlug: string }> }) => {
       <div className="flex max-md:flex-col">
         <div>
           <Post post={post} />
-          <PostComments post={postAction} user={user} />
+          <CommentProvider post={postAction} user={user}>
+            <PostComments />
+          </CommentProvider>
         </div>
         <PostAuthor author={post?.author!} />
       </div>

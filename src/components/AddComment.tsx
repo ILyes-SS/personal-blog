@@ -1,38 +1,21 @@
 "use client";
 import React, { useState, useTransition } from "react";
-import { Prop } from "./PostComments";
 import { Button } from "./ui/button";
 import { addComment } from "@/actions/posts";
-import { User } from "@prisma/client";
 import { toast } from "sonner";
-import { randomUUID } from "crypto";
+import { useCommentContext } from "@/providers/CommentProvider";
 
-const AddComment = ({
-  post,
-  user,
-  setOptimisicCommentCount,
-  setOptimisicComments,
-}: {
-  post: Prop;
-  user: User | null;
-  setOptimisicCommentCount: (action: number) => void;
-  setOptimisicComments: (action: {
-    id: string;
-    createdAt: Date;
-    content: string;
-    authorId: string;
-    postId: string;
-    replyToId: string | null;
-  }) => void;
-}) => {
+const AddComment = () => {
+  const { post, user, setOptimisicComments, setOptimisicCommentCount } =
+    useCommentContext();
   const [isPending, startTransition] = useTransition();
   const [content, setContent] = useState("");
 
   function handleAddComment(formData: FormData) {
     startTransition(async () => {
-      setOptimisicCommentCount(1);
+      setOptimisicCommentCount();
       setOptimisicComments({
-        id: randomUUID(),
+        id: "snoivsofvisnlkdnbsu",
         createdAt: new Date(),
         content: content,
         authorId: user?.id as string,
