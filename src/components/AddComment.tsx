@@ -14,14 +14,24 @@ const AddComment = ({ replyToId }: { replyToId: string | undefined }) => {
   function handleAddComment(formData: FormData) {
     startTransition(async () => {
       setOptimisicCommentCount();
-      if (replyToId)
+      if (!replyToId)
         setOptimisicComments({
           id: "snoivsofvisnlkdnbsu",
-          createdAt: new Date(),
+          createdAt: new Date(Date.now()),
           content: content,
           authorId: user?.id as string,
           postId: post?.id,
         });
+      // else {
+      //   setOptimisicComments({
+      //     id: "snoivsofvisnlkdnbsu",
+      //     createdAt: new Date(Date.now()),
+      //     content: content,
+      //     authorId: user?.id as string,
+      //     postId: post?.id,
+      //     replyToId: replyToId,
+      //   });
+      // }
       const c = await addComment(
         content,
         user?.id as string,

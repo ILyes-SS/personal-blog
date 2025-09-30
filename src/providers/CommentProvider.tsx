@@ -59,7 +59,7 @@ const CommentProvider = ({ children, post, user }: CommentProviderProps) => {
 
   const [optimisticComments, setOptimisicComments] = useOptimistic(
     post?.comments || [],
-    (state, newComment: CommentWithAuthorNreplies) => [...state, newComment],
+    (state, newComment: CommentWithAuthorNreplies) => [newComment, ...state],
   );
 
   const value: CommentProviderContextType = {
