@@ -2,7 +2,7 @@
 import { getAuthor, getReplies } from "@/actions/posts";
 import { cn } from "@/lib/utils";
 import { Comment as CommentType, User } from "@prisma/client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useOptimistic, useState } from "react";
 import { Button } from "./ui/button";
 import { MessageCircle } from "lucide-react";
 import AddComment from "./AddComment";
@@ -12,6 +12,10 @@ const Comment = ({ comment }: { comment: CommentWithAuthorNreplies }) => {
   const [author, setAuthor] = useState<User>(); //comment author
   const [replies, setReplies] = useState<CommentType[]>();
   const [reply, setReply] = useState(false); //toggle form for replying
+  const [optimisticReplies, setOptimisticReplies] = useOptimistic(
+    comment?.replies || [],
+    (state, newComment: CommentType) => [newComment, ...state],
+  );
 
   useEffect(() => {
     (async () => {
@@ -49,10 +53,15 @@ const Comment = ({ comment }: { comment: CommentWithAuthorNreplies }) => {
         >
           <MessageCircle className="rotate-y-180" /> reply
         </Button>
-        {reply && <AddComment replyToId={comment.id as string} />}
+        {reply && (
+          <AddComment
+            setOptimisticReplies={setOptimisticReplies}
+            replyToId={comment.id as string}
+          />
+        )}
 
         {comment?.replies
-          ? comment.replies?.map((reply) => (
+          ? optimisticReplies.map((reply) => (
               <Comment key={reply.id} comment={reply} />
             ))
           : replies

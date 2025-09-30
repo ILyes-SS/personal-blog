@@ -4,8 +4,15 @@ import { Button } from "./ui/button";
 import { addComment } from "@/actions/posts";
 import { toast } from "sonner";
 import { useCommentContext } from "@/providers/CommentProvider";
+import { Comment } from "@prisma/client";
 
-const AddComment = ({ replyToId }: { replyToId: string | undefined }) => {
+const AddComment = ({
+  replyToId,
+  setOptimisticReplies,
+}: {
+  replyToId: string | undefined;
+  setOptimisticReplies?: (comment: Comment) => void;
+}) => {
   const { post, user, setOptimisicComments, setOptimisicCommentCount } =
     useCommentContext();
   const [isPending, startTransition] = useTransition();
@@ -22,16 +29,18 @@ const AddComment = ({ replyToId }: { replyToId: string | undefined }) => {
           authorId: user?.id as string,
           postId: post?.id,
         });
-      // else {
-      //   setOptimisicComments({
-      //     id: "snoivsofvisnlkdnbsu",
-      //     createdAt: new Date(Date.now()),
-      //     content: content,
-      //     authorId: user?.id as string,
-      //     postId: post?.id,
-      //     replyToId: replyToId,
-      //   });
-      // }
+      else {
+        setOptimisticReplies &&
+          setOptimisticReplies({
+            id: "snoivsofvisnlkdnbsu",
+            createdAt: new Date(Date.now()),
+            content: content,
+            authorId: user?.id as string,
+            postId: post?.id,
+            replyToId: replyToId,
+          });
+      }
+      toast.info("Refresh the page if your comment is not visible");
       const c = await addComment(
         content,
         user?.id as string,
