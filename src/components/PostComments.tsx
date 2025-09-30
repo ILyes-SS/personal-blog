@@ -58,7 +58,7 @@ export type Prop =
 const PostComments = () => {
   const { optimisticCommentCount } = useCommentContext();
   return (
-    <div>
+    <div id="comment-section">
       <Separator className="my-6" />
       <h1 className="mb-2 text-2xl font-semibold">
         Top Comments ({optimisticCommentCount})

@@ -81,19 +81,28 @@ const PostActions = ({
       }
     });
   }
+  const scrollToTarget = () => {
+    document.getElementById("comment-section")?.scrollIntoView({
+      behavior: "smooth",
+    });
+  };
   return (
     <div>
       <div>
         <Heart
           className="cursor-pointer"
           stroke={optimisticLiked ? "red" : "black"}
-          fill={optimisticLiked ? "red" : undefined}
-          onClick={handleLikePost}
+          fill={optimisticLiked ? "red" : "transparent"}
+          onClick={isPending ? undefined : handleLikePost}
         />
         <p> {optimisticLikeCount} </p>
       </div>
       <div>
-        <MessageCircleMore /> {post?.comments.length}
+        <MessageCircleMore
+          className="rotate-y-180 cursor-pointer"
+          onClick={scrollToTarget}
+        />{" "}
+        {post?.comments.length}
       </div>
       <div>
         <Link className="cursor-pointer" onClick={handleCopy} />
