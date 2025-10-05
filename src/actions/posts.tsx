@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/db/prisma";
+import { getUser } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -167,3 +168,12 @@ export const getReplies = async (commentId: string) => {
     console.log("get replies failed ", error);
   }
 };
+
+export async function getLikedPosts() {
+  const authUserEmail = (await getUser())?.email;
+  const user = await prisma.user.findUnique({
+    where: { email: authUserEmail },
+    select: { likedPosts: true },
+  });
+  return user?.likedPosts;
+}

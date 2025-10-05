@@ -1,5 +1,5 @@
 "use client";
-import React, { useActionState, useMemo, useTransition } from "react";
+import React, { useEffect, useMemo, useState, useTransition } from "react";
 import PostCard from "./PostCard";
 import { PostProps } from "@/utils/types";
 import { Category } from "@prisma/client";
@@ -8,7 +8,7 @@ import Fuse from "fuse.js";
 import { Edit2, Trash2 } from "lucide-react";
 import { Button } from "./ui/button";
 import Link from "next/link";
-import { deletePost } from "@/actions/posts";
+import { deletePost, getLikedPosts } from "@/actions/posts";
 import {
   AlertDialogDescription,
   AlertDialogFooter,
@@ -38,15 +38,25 @@ const FilteredPosts = ({
   const search = searchParams.get("search")?.trim() ?? "";
 
   const [isPending, startTransition] = useTransition();
+  const [likedPosts, setLikedPosts] = useState<PostProps[] | null>(null);
+
+  useEffect(() => {
+    if (category === "liked") {
+      getLikedPosts().then((posts) => {
+        setLikedPosts(posts || []);
+      });
+    }
+  }, [category]);
 
   const filteredPosts = useMemo(() => {
     const categoryId = categories.find(
       (ctg) => ctg.title == String(category),
     )?.id;
-    const categoryPosts = posts.filter(
+    let categoryPosts = posts.filter(
       (post) => post.categoryId == categoryId || category == "all",
     );
     if (searchParams.get("category") == "liked") {
+      categoryPosts = likedPosts!;
     }
     const fuse = new Fuse(posts, {
       keys: ["title", "content"],
@@ -61,10 +71,10 @@ const FilteredPosts = ({
     const filtered = posts.filter(
       (post) =>
         searchPosts.find((s) => s.slug == post.slug) &&
-        categoryPosts.find((s) => s.slug == post.slug),
+        categoryPosts?.find((s) => s.slug == post.slug),
     );
     return filtered;
-  }, [posts, categories, category, search]);
+  }, [posts, categories, category, search, likedPosts]);
 
   function handleDeletePost(slug: string) {
     startTransition(async () => {
