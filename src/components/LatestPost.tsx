@@ -18,7 +18,7 @@ const LatestPost = async ({
     <Link href={"/" + slug} prefetch className="block px-4">
       <h1 className="mb-2 text-3xl font-semibold">Latest Post</h1>
       <Image
-        src={cover ?? "/placeholder.png"}
+        src={cover || "/placeholder.png"}
         alt={title}
         width={900}
         height={300}

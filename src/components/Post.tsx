@@ -34,7 +34,7 @@ const Post = ({ post }: { post: PostProp }) => {
   return (
     <div className="flex flex-col gap-3">
       <Image
-        src={post?.cover!}
+        src={post?.cover! || "/placeholder-small.png"}
         height={200}
         width={400}
         alt={post?.title + " cover image"}

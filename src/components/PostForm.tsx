@@ -4,6 +4,7 @@ import { Category, Post, User } from "@prisma/client";
 import { createPost, editPost } from "@/actions/posts";
 import { useTransition } from "react";
 import { toast } from "sonner";
+import { Button } from "./ui/button";
 
 type Inputs = {
   title: string;
@@ -139,10 +140,7 @@ const PostForm = ({
         />
       </div>
       {errors.content && <span>This field is required</span>}
-      <button
-        type="submit"
-        className="rounded bg-blue-600 px-4 py-2 text-white disabled:opacity-50"
-      >
+      <Button type="submit" className="cursor-pointer">
         {isPending
           ? edit
             ? "Editing..."
@@ -150,7 +148,7 @@ const PostForm = ({
           : edit
             ? "Edit Post"
             : "Create Post"}
-      </button>
+      </Button>
     </form>
   );
 };

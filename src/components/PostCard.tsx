@@ -21,7 +21,7 @@ const PostCard = ({
     <Link href={"/" + slug} prefetch className="block">
       <div className="relative">
         <Image
-          src={cover ?? "/placeholder-small.png"}
+          src={cover || "/placeholder-small.png"}
           alt={title}
           width={300}
           height={200}
@@ -34,7 +34,7 @@ const PostCard = ({
         {title}
       </h2>
       <p className="overflow-hidden text-nowrap text-ellipsis">{content}</p>
-      <p>{createdAt.toISOString()}</p>
+      <p>{createdAt.toLocaleDateString()}</p>
     </Link>
   );
 };
