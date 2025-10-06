@@ -1,10 +1,11 @@
 "use client";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Category, Post, User } from "@prisma/client";
-import { createPost, editPost } from "@/actions/posts";
-import { useTransition } from "react";
+import { createPost, editPost, uploadCover } from "@/actions/posts";
+import { useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
+import { Input } from "./ui/input";
 
 type Inputs = {
   title: string;
@@ -44,13 +45,20 @@ const PostForm = ({
       : undefined,
   );
   const [isPending, startTransition] = useTransition();
+  const fileInput = useRef<HTMLInputElement>(null);
+  const [preview, setPreview] = useState(post!.cover);
   const onSubmitCreate: SubmitHandler<Inputs> = (data) => {
     startTransition(async () => {
+      const cover = await uploadCover(fileInput.current?.files?.[0], data.slug);
+      if (!cover) {
+        toast.error("failed to upload cover");
+        return;
+      }
       const post = await createPost(
         data.title,
         data.category,
         data.content,
-        data.cover,
+        cover,
         data.slug,
         author!.id,
       );
@@ -61,11 +69,16 @@ const PostForm = ({
 
   const onSubmitEdit: SubmitHandler<Inputs> = (data) => {
     startTransition(async () => {
+      const cover = await uploadCover(fileInput.current?.files?.[0], data.slug);
+      if (!cover) {
+        toast.error("failed to upload cover");
+        return;
+      }
       const p = await editPost(
         data.title,
         data.category,
         data.content,
-        data.cover,
+        cover,
         data.slug,
         post!.id,
       );
@@ -91,7 +104,7 @@ const PostForm = ({
         />
         {errors.title && <span>This field is required</span>}
       </div>
-      <div>
+      {/* <div>
         <label htmlFor="cover" className="mb-1 block font-medium">
           Cover Image URL
         </label>
@@ -102,7 +115,31 @@ const PostForm = ({
           {...register("cover", { required: true })}
         />
         {errors.cover && <span>This field is required</span>}
+      </div> */}
+      {/* add a field to upload the cover image */}
+      <div>
+        <label htmlFor="cover" className="mb-1 block font-medium">
+          Cover Image
+        </label>
+        <Input
+          id="cover"
+          type="file"
+          accept="image/*"
+          className="w-full rounded border px-3 py-2"
+          onChange={(e) =>
+            setPreview(URL.createObjectURL(e.target.files?.[0]!))
+          }
+          ref={fileInput}
+        />
+        {preview && (
+          <img
+            src={preview || "/placeholder-small.png"}
+            alt="cover"
+            className="w-full rounded border px-3 py-2"
+          />
+        )}
       </div>
+
       <div>
         <label htmlFor="category" className="mb-1 block font-medium">
           Category

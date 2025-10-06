@@ -34,7 +34,13 @@ const PostCard = ({
         {title}
       </h2>
       <p className="overflow-hidden text-nowrap text-ellipsis">{content}</p>
-      <p>{createdAt.toLocaleDateString()}</p>
+      <p>
+        {createdAt.getFullYear() +
+          "/" +
+          createdAt.getMonth() +
+          "/" +
+          createdAt.getDate()}
+      </p>
     </Link>
   );
 };

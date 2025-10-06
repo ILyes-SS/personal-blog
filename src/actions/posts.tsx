@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@/db/prisma";
-import { getUser } from "@/lib/supabase/server";
+import { createClient, getUser } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -176,4 +176,23 @@ export async function getLikedPosts() {
     select: { likedPosts: true },
   });
   return user?.likedPosts;
+}
+
+export async function uploadCover(file: File | undefined, slug: string) {
+  const supabase = await createClient();
+  const { data, error } = await supabase.storage
+    .from("covers")
+    .upload(slug + "-" + file?.name + ".png", file!, { upsert: true });
+  console.log("data", data);
+  if (error) {
+    console.error(error);
+    return undefined;
+  }
+  const {
+    data: { publicUrl },
+  } = supabase.storage
+    .from("covers")
+    .getPublicUrl(slug + "-" + file?.name + ".png");
+  console.log(publicUrl);
+  return publicUrl!;
 }
