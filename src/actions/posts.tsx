@@ -34,10 +34,11 @@ export async function createPost(
         author: { connect: { id: authorId } },
       },
     });
-    revalidatePath("/create-posts");
     return post;
   } catch (error) {
     return null;
+  } finally {
+    redirect("/my-posts");
   }
 }
 

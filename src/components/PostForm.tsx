@@ -46,7 +46,7 @@ const PostForm = ({
   );
   const [isPending, startTransition] = useTransition();
   const fileInput = useRef<HTMLInputElement>(null);
-  const [preview, setPreview] = useState(post!.cover);
+  const [preview, setPreview] = useState(edit ? post!.cover : null);
   const onSubmitCreate: SubmitHandler<Inputs> = (data) => {
     startTransition(async () => {
       const cover = await uploadCover(fileInput.current?.files?.[0], data.slug);
@@ -69,11 +69,21 @@ const PostForm = ({
 
   const onSubmitEdit: SubmitHandler<Inputs> = (data) => {
     startTransition(async () => {
-      const cover = await uploadCover(fileInput.current?.files?.[0], data.slug);
-      if (!cover) {
-        toast.error("failed to upload cover");
-        return;
+      let cover = post!.cover; // Keep existing cover by default
+
+      // Only upload new cover if a file is selected
+      if (fileInput.current?.files?.[0]) {
+        const newCover = await uploadCover(
+          fileInput.current?.files?.[0],
+          data.slug,
+        );
+        if (!newCover) {
+          toast.error("failed to upload cover");
+          return;
+        }
+        cover = newCover;
       }
+
       const p = await editPost(
         data.title,
         data.category,
@@ -119,7 +129,7 @@ const PostForm = ({
       {/* add a field to upload the cover image */}
       <div>
         <label htmlFor="cover" className="mb-1 block font-medium">
-          Cover Image
+          Cover Image {edit && "(leave empty to keep current image)"}
         </label>
         <Input
           id="cover"
