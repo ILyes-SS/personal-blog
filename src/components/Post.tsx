@@ -1,4 +1,3 @@
-import { Post as PostType } from "@prisma/client";
 import Image from "next/image";
 type PostProp =
   | ({

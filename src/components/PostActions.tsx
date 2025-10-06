@@ -87,8 +87,8 @@ const PostActions = ({
     });
   };
   return (
-    <div>
-      <div>
+    <div className="max-sm:fixed max-sm:right-0 max-sm:bottom-0 max-sm:left-0 max-sm:flex max-sm:justify-between max-sm:border-t max-sm:bg-white max-sm:p-3 max-sm:shadow-md">
+      <div className="flex flex-col items-center">
         <Heart
           className="cursor-pointer"
           stroke={optimisticLiked ? "red" : "black"}
@@ -97,14 +97,14 @@ const PostActions = ({
         />
         <p> {optimisticLikeCount} </p>
       </div>
-      <div>
+      <div className="flex flex-col items-center">
         <MessageCircleMore
           className="rotate-y-180 cursor-pointer"
           onClick={scrollToTarget}
         />{" "}
         {post?.comments.length}
       </div>
-      <div>
+      <div className="flex flex-col items-center">
         <Link className="cursor-pointer" onClick={handleCopy} />
       </div>
     </div>
