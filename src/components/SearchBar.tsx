@@ -25,9 +25,14 @@ const SearchBar = () => {
   }, [text, searchParams, router, pathname]);
 
   return (
-    <div className="relative">
-      <Search className="absolute top-2 right-1" />{" "}
-      <Input value={text} onChange={(e) => setText(e.target.value)}></Input>
+    <div className="relative mx-auto w-full max-w-md">
+      <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-gray-400" />
+      <Input
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        placeholder="Search posts..."
+        className="w-full py-2 pr-4 pl-10"
+      />
     </div>
   );
 };

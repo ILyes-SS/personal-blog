@@ -45,14 +45,14 @@ const page = async ({ params }: { params: Promise<{ postSlug: string }> }) => {
 
   const alreadyLiked = userWithLikes?.likedPosts.length! > 0;
   return (
-    <div className="flex">
+    <div className="flex w-full">
       <PostActions
         post={postAction}
         alreadyLiked={alreadyLiked}
         userId={user?.id as string}
       />
-      <div className="flex max-md:flex-col">
-        <div>
+      <div className="flex flex-1 justify-evenly max-md:flex-col">
+        <div className="">
           <Post post={post} />
           <CommentProvider post={postAction} user={user}>
             <PostComments />

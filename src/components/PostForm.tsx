@@ -100,19 +100,21 @@ const PostForm = ({
   return (
     <form
       onSubmit={handleSubmit(edit ? onSubmitEdit : onSubmitCreate)}
-      className="mx-auto mt-8 max-w-xl space-y-4"
+      className="mx-auto mt-4 max-w-2xl space-y-4 p-4 sm:mt-8 sm:space-y-6 sm:p-6"
     >
       <div>
-        <label htmlFor="title" className="mb-1 block font-medium">
+        <label htmlFor="title" className="mb-2 block text-sm font-medium">
           Title
         </label>
         <input
           id="title"
           type="text"
-          className="w-full rounded border px-3 py-2"
+          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none sm:text-base"
           {...register("title", { required: true })}
         />
-        {errors.title && <span>This field is required</span>}
+        {errors.title && (
+          <span className="text-sm text-red-500">This field is required</span>
+        )}
       </div>
       {/* <div>
         <label htmlFor="cover" className="mb-1 block font-medium">
@@ -128,66 +130,80 @@ const PostForm = ({
       </div> */}
       {/* add a field to upload the cover image */}
       <div>
-        <label htmlFor="cover" className="mb-1 block font-medium">
+        <label htmlFor="cover" className="mb-2 block text-sm font-medium">
           Cover Image {edit && "(leave empty to keep current image)"}
         </label>
         <Input
           id="cover"
           type="file"
           accept="image/*"
-          className="w-full rounded border px-3 py-2"
+          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none sm:text-base"
           onChange={(e) =>
             setPreview(URL.createObjectURL(e.target.files?.[0]!))
           }
           ref={fileInput}
         />
         {preview && (
-          <img
-            src={preview || "/placeholder-small.png"}
-            alt="cover"
-            className="w-full rounded border px-3 py-2"
-          />
+          <div className="mt-3">
+            <img
+              src={preview || "/placeholder-small.png"}
+              alt="cover"
+              className="mx-auto w-full max-w-md rounded-lg border shadow-sm"
+            />
+          </div>
         )}
       </div>
 
       <div>
-        <label htmlFor="category" className="mb-1 block font-medium">
+        <label htmlFor="category" className="mb-2 block text-sm font-medium">
           Category
         </label>
-        <select {...register("category")}>
+        <select
+          {...register("category")}
+          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none sm:text-base"
+        >
           {categories.map((category) => (
             <option key={category.title} value={category.title}>
               {category.title}
             </option>
           ))}
         </select>
-        {errors.category && <span>This field is required</span>}
+        {errors.category && (
+          <span className="text-sm text-red-500">This field is required</span>
+        )}
       </div>
       <div>
-        <label htmlFor="slug" className="mb-1 block font-medium">
+        <label htmlFor="slug" className="mb-2 block text-sm font-medium">
           Slug
         </label>
         <input
           id="slug"
           type="text"
-          className="w-full rounded border px-3 py-2"
+          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none sm:text-base"
           {...register("slug", { required: true })}
         />
-        {errors.slug && <span>This field is required</span>}
+        {errors.slug && (
+          <span className="text-sm text-red-500">This field is required</span>
+        )}
       </div>
       <div>
-        <label htmlFor="content" className="mb-1 block font-medium">
+        <label htmlFor="content" className="mb-2 block text-sm font-medium">
           Content
         </label>
         <textarea
           id="content"
-          className="w-full rounded border px-3 py-2"
+          className="resize-vertical w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none sm:text-base"
           {...register("content", { required: true })}
-          rows={6}
+          rows={8}
         />
+        {errors.content && (
+          <span className="text-sm text-red-500">This field is required</span>
+        )}
       </div>
-      {errors.content && <span>This field is required</span>}
-      <Button type="submit" className="cursor-pointer">
+      <Button
+        type="submit"
+        className="w-full cursor-pointer px-6 py-2 sm:w-auto"
+      >
         {isPending
           ? edit
             ? "Editing..."

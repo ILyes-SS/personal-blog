@@ -85,20 +85,24 @@ const FilteredPosts = ({
   }
 
   return (
-    <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 xl:grid-cols-4">
       {filteredPosts.length > 0 ? (
         filteredPosts.map((post) => (
-          <div key={post.slug}>
+          <div key={post.slug} className="flex flex-col">
             <PostCard categories={categories} {...post} />
             {editable && (
-              <div>
+              <div className="mt-2 flex justify-center gap-2 p-2">
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
-                    <Button variant={"ghost"}>
-                      <Trash2 />
+                    <Button
+                      variant={"ghost"}
+                      size="sm"
+                      className="text-red-600 hover:text-red-700"
+                    >
+                      <Trash2 className="h-4 w-4" />
                     </Button>
                   </AlertDialogTrigger>
-                  <AlertDialogContent>
+                  <AlertDialogContent className="sm:max-w-md">
                     <AlertDialogHeader>
                       <AlertDialogTitle>
                         Are you sure you want to delete this post?
@@ -108,20 +112,23 @@ const FilteredPosts = ({
                         delete your Post.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogFooter className="flex-col gap-2 sm:flex-row">
+                      <AlertDialogCancel className="w-full sm:w-auto">
+                        Cancel
+                      </AlertDialogCancel>
                       <AlertDialogAction
                         disabled={isPending}
                         onClick={() => handleDeletePost(post.slug)}
+                        className="w-full bg-red-600 hover:bg-red-700 sm:w-auto"
                       >
                         Delete
                       </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>
-                <Button variant={"ghost"} asChild>
+                <Button variant={"ghost"} size="sm" asChild className="">
                   <Link href={"/edit-post/" + post.slug}>
-                    <Edit2 />
+                    <Edit2 className="h-4 w-4" />
                   </Link>
                 </Button>
               </div>
@@ -129,8 +136,10 @@ const FilteredPosts = ({
           </div>
         ))
       ) : (
-        <div className="col-span-full py-8 text-center">
-          <p>No posts found matching your criteria.</p>
+        <div className="col-span-full py-12 text-center">
+          <p className="text-lg text-gray-500">
+            No posts found matching your criteria.
+          </p>
         </div>
       )}
     </div>

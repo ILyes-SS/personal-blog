@@ -87,25 +87,31 @@ const PostActions = ({
     });
   };
   return (
-    <div className="max-sm:fixed max-sm:right-0 max-sm:bottom-0 max-sm:left-0 max-sm:flex max-sm:justify-between max-sm:border-t max-sm:bg-white max-sm:p-3 max-sm:shadow-md">
-      <div className="flex flex-col items-center">
-        <Heart
-          className="cursor-pointer"
-          stroke={optimisticLiked ? "red" : "black"}
-          fill={optimisticLiked ? "red" : "transparent"}
-          onClick={isPending ? undefined : handleLikePost}
-        />
-        <p> {optimisticLikeCount} </p>
-      </div>
-      <div className="flex flex-col items-center">
-        <MessageCircleMore
-          className="rotate-y-180 cursor-pointer"
-          onClick={scrollToTarget}
-        />{" "}
-        {post?.comments.length}
-      </div>
-      <div className="flex flex-col items-center">
-        <Link className="cursor-pointer" onClick={handleCopy} />
+    <div className="max-sm:fixed max-sm:right-0 max-sm:bottom-0 max-sm:left-0 max-sm:flex max-sm:justify-between max-sm:border-t max-sm:bg-white max-sm:p-3 max-sm:shadow-md sm:max-w-[80px] sm:px-4 sm:py-6">
+      <div className="flex w-full items-center justify-around gap-4 sm:flex-col sm:gap-6">
+        <div className="flex flex-col items-center gap-2">
+          <Heart
+            className="h-6 w-6 cursor-pointer transition-colors hover:text-red-500"
+            stroke={optimisticLiked ? "red" : "currentColor"}
+            fill={optimisticLiked ? "red" : "transparent"}
+            onClick={isPending ? undefined : handleLikePost}
+          />
+          <p className="text-sm font-medium">{optimisticLikeCount}</p>
+        </div>
+        <div className="flex flex-col items-center gap-2">
+          <MessageCircleMore
+            className="h-6 w-6 cursor-pointer transition-colors hover:text-blue-500"
+            onClick={scrollToTarget}
+          />
+          <p className="text-sm font-medium">{post?.comments.length}</p>
+        </div>
+        <div className="flex flex-col items-center gap-2">
+          <Link
+            className="h-6 w-6 cursor-pointer transition-colors hover:text-green-500"
+            onClick={handleCopy}
+          />
+          <p className="text-sm font-medium">Share</p>
+        </div>
       </div>
     </div>
   );

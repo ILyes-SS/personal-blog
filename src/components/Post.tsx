@@ -31,31 +31,50 @@ type PostProp =
 
 const Post = ({ post }: { post: PostProp }) => {
   return (
-    <div className="flex flex-col gap-3">
-      <Image
-        src={post?.cover! || "/placeholder-small.png"}
-        height={200}
-        width={400}
-        alt={post?.title + " cover image"}
-      />
-      <div className="flex items-center gap-2">
+    <article className="flex flex-col gap-4 sm:gap-6">
+      <div className="relative aspect-video w-full overflow-hidden rounded-lg sm:aspect-[16/9]">
+        <Image
+          src={post?.cover! || "/placeholder-small.png"}
+          fill
+          className="object-center"
+          alt={post?.title + " cover image"}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
+        />
+      </div>
+      <div className="flex items-center gap-3">
         <Image
           src={"/author.png"}
-          height={50}
-          width={50}
+          height={40}
+          width={40}
           alt={"author profile picture's placeholder"}
+          className="flex-shrink-0 rounded-full"
         />
-        <div>
-          <p className="text-sm text-gray-600">{post?.author.email}</p>
-          <p className="text-sm text-gray-600">
-            Posted on {post?.createdAt.toISOString()}
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-sm text-gray-600">{post?.author.email}</p>
+          <p className="text-xs text-gray-500 sm:text-sm">
+            {post?.createdAt &&
+              new Date(post.createdAt).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
           </p>
         </div>
       </div>
-      <h1 className="text-3xl font-semibold">{post?.title}</h1>
-      <h3 className="text-lg font-semibold">#{post?.category.title}</h3>
-      <p>{post?.content}</p>
-    </div>
+      <header>
+        <h1 className="text-2xl leading-tight font-bold sm:text-3xl lg:text-4xl">
+          {post?.title}
+        </h1>
+        <div className="mt-2">
+          <span className="inline-block rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-800">
+            #{post?.category.title}
+          </span>
+        </div>
+      </header>
+      <div className="prose prose-sm sm:prose-base lg:prose-lg max-w-none">
+        <p className="leading-relaxed whitespace-pre-wrap">{post?.content}</p>
+      </div>
+    </article>
   );
 };
 

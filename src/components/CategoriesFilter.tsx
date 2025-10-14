@@ -25,25 +25,32 @@ const CategoriesFilter = ({ categories }: { categories: Category[] }) => {
   }, [selectedCategory]);
 
   return (
-    <div className="flex gap-2">
-      {" "}
+    <div className="flex flex-wrap justify-center gap-2 sm:justify-start">
       {[{ title: "all" }, { title: "liked" }, ...categories].map((category) => {
         return (
           <Button
             variant={"outline"}
             onClick={() => setSelectedCategory(category.title)}
             key={category?.title}
+            size="sm"
             className={cn(
-              category.title == "liked" ? "bg-red-500 text-white" : "",
-              selectedCategory == category.title && "bg-black text-white",
-              "rounded-2xl",
+              category.title == "liked"
+                ? "border-red-500 bg-red-500 text-white hover:bg-red-600"
+                : "",
+              selectedCategory == category.title &&
+                category.title !== "liked" &&
+                "border-black bg-black text-white",
+              "rounded-full px-3 py-1 text-xs sm:px-4 sm:py-2 sm:text-sm",
             )}
           >
-            #{category.title}
-            {category.title == "liked" ? <Heart stroke="white" /> : null}{" "}
+            <span className="hidden sm:inline">#</span>
+            {category.title}
+            {category.title == "liked" && (
+              <Heart stroke="white" className="ml-1 h-3 w-3 sm:h-4 sm:w-4" />
+            )}
           </Button>
         );
-      })}{" "}
+      })}
     </div>
   );
 };

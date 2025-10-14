@@ -14,16 +14,29 @@ const NavBar = async () => {
   )?.isAuthor;
 
   return (
-    <nav className="flex items-center justify-around p-4 max-[400px]:text-sm">
-      <Link href="/">Home</Link>
-      {isAuthor && <Link href="/my-posts">My Posts</Link>}
-      {user ? (
-        <LogoutButton />
-      ) : (
-        <Button asChild variant={"outline"}>
-          <Link href="/auth/login">Login</Link>
-        </Button>
-      )}
+    <nav className="sticky top-0 z-50 flex items-center justify-between border-b bg-white/80 p-3 backdrop-blur-sm sm:justify-around sm:p-4">
+      <div className="flex items-center justify-between space-x-4 sm:space-x-6">
+        <Link href="/" className="text-lg font-semibold">
+          Home
+        </Link>
+        {isAuthor && (
+          <Link
+            href="/my-posts"
+            className="ml-5 text-sm transition-colors hover:text-gray-600 sm:text-base"
+          >
+            my Posts
+          </Link>
+        )}
+      </div>
+      <div className="flex items-center">
+        {user ? (
+          <LogoutButton />
+        ) : (
+          <Button asChild variant={"outline"} size="sm" className="text-sm">
+            <Link href="/auth/login">Login</Link>
+          </Button>
+        )}
+      </div>
     </nav>
   );
 };

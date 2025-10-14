@@ -122,3 +122,39 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .prose {
+    color: inherit;
+    max-width: none;
+  }
+
+  .prose-sm {
+    font-size: 0.875rem;
+    line-height: 1.7142857;
+  }
+
+  .prose-base {
+    font-size: 1rem;
+    line-height: 1.75;
+  }
+
+  .prose-lg {
+    font-size: 1.125rem;
+    line-height: 1.7777778;
+  }
+}

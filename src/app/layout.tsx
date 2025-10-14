@@ -15,9 +15,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`antialiased`}>
+      <body className={`min-h-screen antialiased`}>
         <NavBar />
-        <main>{children}</main>
+        <main className="min-h-screen px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
+          {children}
+        </main>
         <Toaster />
       </body>
     </html>

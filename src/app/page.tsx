@@ -6,7 +6,7 @@ export default async function Home() {
   const posts = await prisma.post.findMany({ orderBy: { createdAt: "desc" } });
   const latestPost = posts[0];
   return (
-    <div>
+    <div className="space-y-8 sm:space-y-12">
       <LatestPost {...latestPost} />
       <BlogPosts editable={false} posts={posts.toSpliced(0, 1)} />
     </div>

@@ -14,9 +14,9 @@ const page = async () => {
     where: { authorId: author?.id },
   });
   return (
-    <main>
-      <Button asChild>
-        <Link href={"/create-post"}>New Post</Link>
+    <main className="flex flex-col">
+      <Button className="mx-auto mb-5 w-sm max-w-full self-center" asChild>
+        <Link href={"/create-post"}>New Post +</Link>
       </Button>
       <BlogPosts editable={true} posts={myPosts} />
     </main>
