@@ -62,11 +62,8 @@ const FilteredPosts = ({
       keys: ["title", "content"],
       threshold: 0.2,
     });
-    const searchResults = search
-      ? fuse.search((search as string) || "")
-      : posts;
     const searchPosts = search
-      ? searchResults.map((result: any) => result.item)
+      ? fuse.search((search as string) || "").map((result) => result.item)
       : posts;
     const filtered = posts.filter(
       (post) =>
@@ -74,7 +71,7 @@ const FilteredPosts = ({
         categoryPosts?.find((s) => s.slug == post.slug),
     );
     return filtered;
-  }, [posts, categories, category, search, likedPosts]);
+  }, [posts, categories, category, search, likedPosts, searchParams]);
 
   function handleDeletePost(slug: string) {
     startTransition(async () => {

@@ -122,23 +122,25 @@ export async function addComment(
   });
   let post;
   try {
-    let obj = replyToId
-      ? {
-          data: {
-            content: content,
-            post: { connect: { id: postId } },
-            author: { connect: { id: userId } },
-            replyTo: { connect: { id: replyToId } },
-          },
-        }
-      : {
-          data: {
-            content: content,
-            post: { connect: { id: postId } },
-            author: { connect: { id: userId } },
-          },
-        };
-    const newComment = await prisma.comment.create(obj);
+    let newComment;
+    if (replyToId) {
+      newComment = await prisma.comment.create({
+        data: {
+          content: content,
+          post: { connect: { id: postId } },
+          author: { connect: { id: userId } },
+          replyTo: { connect: { id: replyToId } },
+        },
+      });
+    } else {
+      newComment = await prisma.comment.create({
+        data: {
+          content: content,
+          post: { connect: { id: postId } },
+          author: { connect: { id: userId } },
+        },
+      });
+    }
 
     return newComment;
   } catch (error) {

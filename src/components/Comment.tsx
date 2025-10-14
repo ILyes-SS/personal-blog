@@ -21,10 +21,10 @@ const Comment = ({ comment }: { comment: CommentWithAuthorNreplies }) => {
     (async () => {
       const a = await getAuthor(comment.authorId);
       const r = await getReplies(comment.id);
-      setAuthor(a);
+      setAuthor(a ?? undefined);
       setReplies(r?.replies);
     })();
-  }, []);
+  }, [comment.authorId, comment.id]);
 
   return (
     <div>
@@ -62,11 +62,17 @@ const Comment = ({ comment }: { comment: CommentWithAuthorNreplies }) => {
 
         {comment?.replies
           ? optimisticReplies.map((reply) => (
-              <Comment key={reply.id} comment={reply} />
+              <Comment
+                key={reply.id}
+                comment={reply as CommentWithAuthorNreplies}
+              />
             ))
           : replies
             ? replies?.map((reply) => (
-                <Comment key={reply.id} comment={reply} />
+                <Comment
+                  key={reply.id}
+                  comment={reply as CommentWithAuthorNreplies}
+                />
               ))
             : null}
       </div>

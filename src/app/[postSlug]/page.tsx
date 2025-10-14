@@ -43,7 +43,7 @@ const page = async ({ params }: { params: Promise<{ postSlug: string }> }) => {
     },
   });
 
-  const alreadyLiked = userWithLikes?.likedPosts.length! > 0;
+  const alreadyLiked = (userWithLikes?.likedPosts.length ?? 0) > 0;
   return (
     <div className="flex w-full">
       <PostActions
@@ -58,7 +58,7 @@ const page = async ({ params }: { params: Promise<{ postSlug: string }> }) => {
             <PostComments />
           </CommentProvider>
         </div>
-        <PostAuthor author={post?.author!} />
+        {post?.author && <PostAuthor author={post.author} />}
       </div>
     </div>
   );

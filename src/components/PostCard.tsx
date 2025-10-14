@@ -14,9 +14,8 @@ const PostCard = ({
   createdAt,
   categories,
 }: PostProps & { categories: Category[] }) => {
-  const category: string = categories.find(
-    (ctg) => ctg.id == categoryId,
-  )?.title!;
+  const category: string =
+    categories.find((ctg) => ctg.id == categoryId)?.title ?? "";
   return (
     <Link href={"/" + slug} prefetch className="group block h-full">
       <div className="flex h-full flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-sm transition-shadow duration-200 hover:shadow-md">

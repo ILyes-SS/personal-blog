@@ -34,7 +34,7 @@ const Post = ({ post }: { post: PostProp }) => {
     <article className="flex flex-col gap-4 sm:gap-6">
       <div className="relative aspect-video w-full overflow-hidden rounded-lg sm:aspect-[16/9]">
         <Image
-          src={post?.cover! || "/placeholder-small.png"}
+          src={post?.cover || "/placeholder-small.png"}
           fill
           className="object-center"
           alt={post?.title + " cover image"}
@@ -72,7 +72,7 @@ const Post = ({ post }: { post: PostProp }) => {
         </div>
       </header>
       <div className="prose prose-sm sm:prose-base lg:prose-lg max-w-none">
-        <div dangerouslySetInnerHTML={{ __html: post?.content }} />
+        <div dangerouslySetInnerHTML={{ __html: post?.content || "" }} />
       </div>
     </article>
   );

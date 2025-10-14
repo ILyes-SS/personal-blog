@@ -22,7 +22,7 @@ const CategoriesFilter = ({ categories }: { categories: Category[] }) => {
     }
 
     router.replace(pathname + "?" + params.toString());
-  }, [selectedCategory]);
+  }, [selectedCategory, searchParams, pathname, router]);
 
   return (
     <div className="flex flex-wrap justify-center gap-2 sm:justify-start">

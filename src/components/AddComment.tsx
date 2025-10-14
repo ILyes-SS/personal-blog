@@ -3,7 +3,10 @@ import React, { useState, useTransition } from "react";
 import { Button } from "./ui/button";
 import { addComment } from "@/actions/posts";
 import { toast } from "sonner";
-import { useCommentContext } from "@/providers/CommentProvider";
+import {
+  useCommentContext,
+  CommentWithAuthorNreplies,
+} from "@/providers/CommentProvider";
 import { Comment } from "@prisma/client";
 
 const AddComment = ({
@@ -26,19 +29,22 @@ const AddComment = ({
           id: "snoivsofvisnlkdnbsu",
           createdAt: new Date(Date.now()),
           content: content,
-          authorId: user?.id as string,
-          postId: post?.id,
-        });
+          authorId: user?.id ?? "",
+          postId: post?.id ?? "",
+          author: null,
+          replies: [],
+        } as CommentWithAuthorNreplies);
       else {
-        setOptimisticReplies &&
+        if (setOptimisticReplies) {
           setOptimisticReplies({
             id: "snoivsofvisnlkdnbsu",
             createdAt: new Date(Date.now()),
             content: content,
-            authorId: user?.id as string,
-            postId: post?.id,
+            authorId: user?.id ?? "",
+            postId: post?.id ?? "",
             replyToId: replyToId,
           });
+        }
       }
       toast.info("Refresh the page if your comment is not visible");
       const c = await addComment(

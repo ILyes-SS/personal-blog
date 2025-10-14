@@ -6,6 +6,7 @@ import { useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
+import Image from "next/image";
 import dynamic from "next/dynamic";
 
 const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
@@ -144,15 +145,19 @@ const PostForm = ({
           accept="image/*"
           className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none sm:text-base"
           onChange={(e) =>
-            setPreview(URL.createObjectURL(e.target.files?.[0]!))
+            setPreview(
+              URL.createObjectURL(e.target.files?.[0] ?? new File([], "")),
+            )
           }
           ref={fileInput}
         />
         {preview && (
           <div className="mt-3">
-            <img
+            <Image
               src={preview || "/placeholder-small.png"}
               alt="cover"
+              width={400}
+              height={300}
               className="mx-auto w-full max-w-md rounded-lg border shadow-sm"
             />
           </div>
