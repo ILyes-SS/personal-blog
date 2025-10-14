@@ -47,9 +47,6 @@ const LatestPost = async ({
               <h2 className="mb-3 text-xl leading-tight font-bold transition-colors group-hover:text-blue-600 sm:text-2xl lg:text-3xl">
                 {title}
               </h2>
-              <p className="line-clamp-3 text-sm text-gray-600 sm:text-base">
-                {content}
-              </p>
             </div>
           </div>
         </Link>

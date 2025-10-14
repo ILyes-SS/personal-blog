@@ -72,7 +72,7 @@ const Post = ({ post }: { post: PostProp }) => {
         </div>
       </header>
       <div className="prose prose-sm sm:prose-base lg:prose-lg max-w-none">
-        <p className="leading-relaxed whitespace-pre-wrap">{post?.content}</p>
+        <div dangerouslySetInnerHTML={{ __html: post?.content }} />
       </div>
     </article>
   );

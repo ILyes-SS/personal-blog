@@ -21,7 +21,7 @@ export default function OAuthButtons() {
   };
 
   return (
-    <div className="mb-6 flex flex-col gap-3 sm:flex-row">
+    <div className="mb-6 flex flex-col gap-3">
       <Button
         className="flex h-11 items-center justify-center gap-2"
         variant={"outline"}

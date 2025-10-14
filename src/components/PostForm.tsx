@@ -6,6 +6,10 @@ import { useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
+import dynamic from "next/dynamic";
+
+const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
+import "react-quill-new/dist/quill.snow.css";
 
 type Inputs = {
   title: string;
@@ -44,6 +48,7 @@ const PostForm = ({
         }
       : undefined,
   );
+  const [content, setContent] = useState(edit ? post!.content : "");
   const [isPending, startTransition] = useTransition();
   const fileInput = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState(edit ? post!.cover : null);
@@ -57,7 +62,7 @@ const PostForm = ({
       const post = await createPost(
         data.title,
         data.category,
-        data.content,
+        content,
         cover,
         data.slug,
         author!.id,
@@ -87,7 +92,7 @@ const PostForm = ({
       const p = await editPost(
         data.title,
         data.category,
-        data.content,
+        content,
         cover,
         data.slug,
         post!.id,
@@ -186,7 +191,7 @@ const PostForm = ({
           <span className="text-sm text-red-500">This field is required</span>
         )}
       </div>
-      <div>
+      {/* <div>
         <label htmlFor="content" className="mb-2 block text-sm font-medium">
           Content
         </label>
@@ -199,7 +204,19 @@ const PostForm = ({
         {errors.content && (
           <span className="text-sm text-red-500">This field is required</span>
         )}
-      </div>
+      </div> */}
+      <ReactQuill
+        value={content}
+        onChange={setContent}
+        modules={{
+          toolbar: [
+            ["bold", "italic", "underline"],
+            [{ header: [1, 2, 3, false] }],
+            [{ list: "ordered" }, { list: "bullet" }],
+            ["link", "image"],
+          ],
+        }}
+      />
       <Button
         type="submit"
         className="w-full cursor-pointer px-6 py-2 sm:w-auto"

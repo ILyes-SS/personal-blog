@@ -39,9 +39,6 @@ const PostCard = ({
           <h2 className="mb-2 line-clamp-2 text-lg font-semibold transition-colors group-hover:text-blue-600 sm:text-xl">
             {title}
           </h2>
-          <p className="mb-3 line-clamp-2 flex-1 text-sm text-gray-600">
-            {content}
-          </p>
           <p className="mt-auto text-xs text-gray-500">
             {createdAt.toLocaleDateString("en-US", {
               year: "numeric",

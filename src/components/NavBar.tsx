@@ -8,7 +8,7 @@ import { prisma } from "@/db/prisma";
 const NavBar = async () => {
   const user = await getUser();
   const isAuthor = (
-    await prisma.user.findUnique({
+    await prisma.user.findFirst({
       where: { email: user?.email },
     })
   )?.isAuthor;
