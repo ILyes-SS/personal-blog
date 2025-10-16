@@ -7,7 +7,8 @@
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint",
-    "migrate": "npx prisma generate && env $(cat .env.local | xargs) npx prisma migrate dev"
+    "migrate": "npx prisma generate && env $(cat .env.local | xargs) npx prisma migrate dev",
+  "postinstall": "npx prisma generate"
   },
   "prisma": {
     "schema": "src/db/schema.prisma"
