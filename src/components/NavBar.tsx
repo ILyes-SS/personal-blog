@@ -7,11 +7,13 @@ import { prisma } from "@/db/prisma";
 
 const NavBar = async () => {
   const user = await getUser();
-  const isAuthor = (
-    await prisma.user.findFirst({
-      where: { email: user?.email },
-    })
-  )?.isAuthor;
+  let isAuthor = false;
+  if (user?.email) {
+    const dbUser = await prisma.user.findFirst({
+      where: { email: user.email },
+    });
+    isAuthor = dbUser?.isAuthor || false;
+  }
 
   return (
     <nav className="sticky top-0 z-50 flex items-center justify-between border-b bg-white/80 p-3 backdrop-blur-sm sm:justify-around sm:p-4">
@@ -24,7 +26,7 @@ const NavBar = async () => {
             href="/my-posts"
             className="ml-5 text-sm transition-colors hover:text-gray-600 sm:text-base"
           >
-            my Posts
+            My Posts
           </Link>
         )}
       </div>
