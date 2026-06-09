@@ -12,13 +12,16 @@ const SearchBar = () => {
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
+      const currentSearch = searchParams.get("search") || "";
+      if (currentSearch === text.trim()) return;
+
       const params = new URLSearchParams(searchParams.toString()); // clone
       if (text.trim()) {
         params.set("search", text.trim());
       } else {
         params.delete("search");
       }
-      router.replace(pathname + "?" + params.toString());
+      router.replace(pathname + "?" + params.toString(), { scroll: false });
     }, 300); // 300ms debounce
 
     return () => clearTimeout(timeoutId);

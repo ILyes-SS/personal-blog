@@ -15,13 +15,16 @@ const CategoriesFilter = ({ categories }: { categories: Category[] }) => {
   );
 
   useEffect(() => {
+    const currentCategory = searchParams?.get("category") || "all";
+    if (currentCategory === selectedCategory) return;
+
     const params = new URLSearchParams(searchParams.toString()); // clone
     params.set("category", selectedCategory as string);
     if (params.get("category") === "all") {
       params.delete("category");
     }
 
-    router.replace(pathname + "?" + params.toString());
+    router.replace(pathname + "?" + params.toString(), { scroll: false });
   }, [selectedCategory, searchParams, pathname, router]);
 
   return (
