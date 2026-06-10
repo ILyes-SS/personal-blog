@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Personal Blog
+
+A modern, full-stack personal blog built with Next.js 15, TypeScript, Tailwind CSS, Prisma, and Supabase.
+
+## Features
+
+- **Next.js 15 App Router:** Leveraging the latest Next.js features for optimal performance and SEO.
+- **TypeScript:** Fully typed codebase for improved developer experience and reliability.
+- **Tailwind CSS v4:** Utility-first styling with modern aesthetic design.
+- **Authentication:** Secure user authentication using Supabase SSR (supporting GitHub & Google OAuth).
+- **Database:** PostgreSQL database powered by Supabase, interacted with via Prisma ORM.
+- **Rich Text Editing:** Integrated with `react-quill-new` for drafting and editing blog posts.
+- **Search Capabilities:** Fast, fuzzy search implementations using `fuse.js`.
+- **Beautiful UI Components:** Utilizing Radix UI primitives and custom styling for accessible, premium interfaces. Notifications powered by `sonner`.
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+- [Node.js](https://nodejs.org/) (v20 or higher recommended)
+- npm, yarn, pnpm, or bun
 
 ## Getting Started
 
-First, run the development server:
+1. **Clone the repository:**
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+   ```bash
+   git clone <your-repo-url>
+   cd personal-blog
+   ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. **Install dependencies:**
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+   ```bash
+   npm install
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. **Set up environment variables:**
+   Create a `.env` or `.env.local` file in the root of the project and add your database and Supabase credentials. Example:
+
+   ```env
+   DATABASE_URL="postgresql://user:password@host:port/database"
+   DIRECT_URL="postgresql://user:password@host:port/database"
+   NEXT_PUBLIC_SUPABASE_URL="your-supabase-url"
+   NEXT_PUBLIC_SUPABASE_ANON_KEY="your-supabase-anon-key"
+   ```
+
+4. **Initialize the database:**
+   Run the Prisma migrations to set up your database schema:
+
+   ```bash
+   npm run migrate
+   ```
+
+5. **Start the development server:**
+
+   ```bash
+   npm run dev
+   ```
+
+   Open [http://localhost:3000](http://localhost:3000) with your browser to see the application.
+
+## Project Structure
+
+- `src/app`: Contains the Next.js App Router pages (divided into `(auth)` and `(main)` groups).
+- `src/components`: Reusable React components.
+- `src/db`: Prisma schema and database configuration.
+- `src/lib` / `src/utils`: Utility functions, helpers, and configurations.
+- `src/actions`: Server actions for handling data mutations.
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+To learn more about the technologies used in this project, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Prisma Documentation](https://www.prisma.io/docs)
+- [Supabase Documentation](https://supabase.com/docs)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## License
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project is licensed under the MIT License.
