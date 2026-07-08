@@ -77,6 +77,17 @@ export async function likePost(
   postId: string,
   alreadyLiked: boolean,
 ) {
+  // Only authenticated users may like posts. Derive the acting user from the
+  // session instead of trusting the id passed by the client.
+  const authUserEmail = (await getUser())?.email;
+  if (!authUserEmail) return null;
+  const authUser = await prisma.user.findUnique({
+    where: { email: authUserEmail },
+    select: { id: true },
+  });
+  if (!authUser) return null;
+  userId = authUser.id;
+
   const postSlug = await prisma.post.findUnique({
     where: { id: postId },
     select: { slug: true },
@@ -116,6 +127,17 @@ export async function addComment(
   postId: string,
   replyToId: string | undefined,
 ) {
+  // Only authenticated users may comment. Derive the comment author from the
+  // session instead of trusting the id passed by the client.
+  const authUserEmail = (await getUser())?.email;
+  if (!authUserEmail) return null;
+  const authUser = await prisma.user.findUnique({
+    where: { email: authUserEmail },
+    select: { id: true },
+  });
+  if (!authUser) return null;
+  userId = authUser.id;
+
   const postSlug = await prisma.post.findUnique({
     where: { id: postId },
     select: { slug: true },
@@ -174,6 +196,7 @@ export const getReplies = async (commentId: string) => {
 
 export async function getLikedPosts() {
   const authUserEmail = (await getUser())?.email;
+  if (!authUserEmail) return [];
   const user = await prisma.user.findUnique({
     where: { email: authUserEmail },
     select: { likedPosts: true },

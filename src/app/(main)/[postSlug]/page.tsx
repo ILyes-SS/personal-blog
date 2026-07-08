@@ -10,9 +10,13 @@ import React from "react";
 const page = async ({ params }: { params: Promise<{ postSlug: string }> }) => {
   const { postSlug } = await params;
   const authUserEmail = (await getUser())?.email;
-  const user = await prisma.user.findUnique({
-    where: { email: authUserEmail },
-  });
+  // Unauthenticated visitors can still read posts, so only look up the
+  // matching user record when there is an authenticated session.
+  const user = authUserEmail
+    ? await prisma.user.findUnique({
+        where: { email: authUserEmail },
+      })
+    : null;
   //try to reduce the fetching below
   const post = await prisma.post.findUnique({
     where: { slug: postSlug },
@@ -33,15 +37,17 @@ const page = async ({ params }: { params: Promise<{ postSlug: string }> }) => {
       },
     },
   });
-  const userWithLikes = await prisma.user.findUnique({
-    where: { id: user?.id },
-    select: {
-      likedPosts: {
-        where: { id: post?.id },
-        select: { id: true },
-      },
-    },
-  });
+  const userWithLikes = user
+    ? await prisma.user.findUnique({
+        where: { id: user.id },
+        select: {
+          likedPosts: {
+            where: { id: post?.id },
+            select: { id: true },
+          },
+        },
+      })
+    : null;
 
   const alreadyLiked = (userWithLikes?.likedPosts.length ?? 0) > 0;
   return (
@@ -50,6 +56,7 @@ const page = async ({ params }: { params: Promise<{ postSlug: string }> }) => {
         post={postAction}
         alreadyLiked={alreadyLiked}
         userId={user?.id as string}
+        isAuthenticated={Boolean(user)}
       />
       <div className="flex flex-1 justify-evenly max-md:flex-col">
         <div className="">

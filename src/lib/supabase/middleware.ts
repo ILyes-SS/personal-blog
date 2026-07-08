@@ -40,12 +40,22 @@ export async function updateSession(request: NextRequest) {
   const { data } = await supabase.auth.getClaims();
   const user = data?.claims;
 
-  if (
-    !user &&
-    !request.nextUrl.pathname.startsWith("/login") &&
-    !request.nextUrl.pathname.startsWith("/auth")
-  ) {
-    // no user, potentially respond by redirecting the user to the login page
+  // Routes that require an authenticated user. Everything else (the home page
+  // and individual blog posts) is publicly readable so visitors can browse the
+  // blog without signing in. Actions like commenting and liking still require
+  // authentication and are guarded in their server actions and UI.
+  const protectedRoutes = [
+    "/create-post",
+    "/edit-post",
+    "/my-posts",
+    "/protected",
+  ];
+  const isProtectedRoute = protectedRoutes.some((route) =>
+    request.nextUrl.pathname.startsWith(route),
+  );
+
+  if (!user && isProtectedRoute) {
+    // no user on a protected route, redirect to the login page
     const url = request.nextUrl.clone();
     url.pathname = "/auth/login";
     return NextResponse.redirect(url);

@@ -1,7 +1,7 @@
 "use client";
 import { likePost } from "@/actions/posts";
 import { Heart, Link, MessageCircleMore } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useOptimistic, useState, useTransition } from "react";
 import { toast } from "sonner";
 type PostActionProp =
@@ -39,12 +39,15 @@ const PostActions = ({
   post,
   userId,
   alreadyLiked,
+  isAuthenticated,
 }: {
   post: PostActionProp;
   userId: string;
   alreadyLiked: boolean;
+  isAuthenticated: boolean;
 }) => {
   const path = usePathname();
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
   //   const [isLiked, setIsLiked] = useState(alreadyLiked);
   const [optimisticLiked, setOptimisticLiked] = useOptimistic(
@@ -68,6 +71,11 @@ const PostActions = ({
     }
   };
   function handleLikePost() {
+    if (!isAuthenticated) {
+      toast.info("Please log in to like posts");
+      router.push("/auth/login");
+      return;
+    }
     const wasLiked = alreadyLiked;
     const likeChange = wasLiked ? -1 : 1;
 

@@ -6,9 +6,13 @@ import React, { useEffect, useOptimistic, useState } from "react";
 import { Button } from "./ui/button";
 import { MessageCircle } from "lucide-react";
 import AddComment from "./AddComment";
-import { CommentWithAuthorNreplies } from "@/providers/CommentProvider";
+import {
+  CommentWithAuthorNreplies,
+  useCommentContext,
+} from "@/providers/CommentProvider";
 
 const Comment = ({ comment }: { comment: CommentWithAuthorNreplies }) => {
+  const { user } = useCommentContext();
   const [author, setAuthor] = useState<User>(); //comment author
   const [replies, setReplies] = useState<CommentType[]>();
   const [reply, setReply] = useState(false); //toggle form for replying
@@ -46,14 +50,16 @@ const Comment = ({ comment }: { comment: CommentWithAuthorNreplies }) => {
           </p>
         </div>
         <p> {comment.content} </p>
-        <Button
-          onClick={() => setReply((prev) => !prev)}
-          variant={"ghost"}
-          className="mt-2 cursor-pointer"
-        >
-          <MessageCircle className="rotate-y-180" /> reply
-        </Button>
-        {reply && (
+        {user && (
+          <Button
+            onClick={() => setReply((prev) => !prev)}
+            variant={"ghost"}
+            className="mt-2 cursor-pointer"
+          >
+            <MessageCircle className="rotate-y-180" /> reply
+          </Button>
+        )}
+        {user && reply && (
           <AddComment
             setOptimisticReplies={setOptimisticReplies}
             replyToId={comment.id as string}
