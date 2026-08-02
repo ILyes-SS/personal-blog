@@ -1,5 +1,7 @@
 "use client";
+import Link from "next/link";
 import AddComment from "./AddComment";
+import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
 import CommentsList from "./CommentsList";
 import { useCommentContext } from "@/providers/CommentProvider";
@@ -56,14 +58,25 @@ export type Prop =
     })
   | null;
 const PostComments = () => {
-  const { optimisticCommentCount } = useCommentContext();
+  const { optimisticCommentCount, user } = useCommentContext();
   return (
     <div id="comment-section">
       <Separator className="my-6" />
       <h1 className="mb-2 text-2xl font-semibold">
         Top Comments ({optimisticCommentCount})
       </h1>
-      <AddComment replyToId={undefined} />
+      {user ? (
+        <AddComment replyToId={undefined} />
+      ) : (
+        <div className="flex flex-wrap items-center gap-3 rounded-md border border-gray-300 p-4">
+          <p className="text-sm text-gray-600">
+            Log in to join the conversation.
+          </p>
+          <Button asChild variant="outline" size="sm">
+            <Link href="/auth/login">Log in</Link>
+          </Button>
+        </div>
+      )}
       <CommentsList />
     </div>
   );
